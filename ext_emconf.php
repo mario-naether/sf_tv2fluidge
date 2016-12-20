@@ -29,7 +29,7 @@ $EM_CONF[$_EXTKEY] = array(
 					'extbase'     => '1.3',
 					'fluid'       => '1.3',
 					'typo3'       => '4.5.0-7.6.99',
-					'templavoila' => '1.8.0',
+					'templavoila' => '2.0.4',
 				),
 			'conflicts' =>
 				array(),
