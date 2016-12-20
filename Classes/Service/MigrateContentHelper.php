@@ -53,11 +53,11 @@ class Tx_SfTv2fluidge_Service_MigrateContentHelper implements \TYPO3\CMS\Core\Si
 	public function getAllFileTvTemplates()
 	{
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['templavoila']);
-		tx_templavoila_staticds_tools::readStaticDsFilesIntoArray($extConf);
+        \Extension\Templavoila\Utility\StaticDataStructure\ToolsUtility::readStaticDsFilesIntoArray($extConf);
 		$staticDsFiles = array();
 		foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['templavoila']['staticDataStructures'] as $staticDataStructure)
 		{
-			if ($staticDataStructure['scope'] == tx_templavoila_datastructure::SCOPE_PAGE)
+			if ($staticDataStructure['scope'] == \Extension\Templavoila\Domain\Model\AbstractDataStructure::SCOPE_PAGE)
 			{
 				$staticDsFiles[] = $staticDataStructure['path'];
 			}
