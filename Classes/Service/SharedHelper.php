@@ -412,8 +412,6 @@ class Tx_SfTv2fluidge_Service_SharedHelper implements \TYPO3\CMS\Core\SingletonI
 
 		$res           = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow($fields, $table, $where, '', '', '');
 		$tvTemplateUid = (int)$this->getTvPageTemplateUid($pageUid);
-		# TODO: Fixer Wert
-		$tvTemplateUid = 1;
 
 		return $this->getContentArrayFromFlexform($res, $tvTemplateUid);
 	}
