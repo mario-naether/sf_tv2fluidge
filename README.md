@@ -242,6 +242,13 @@ This module should only be used when the following steps are processed:
 * Conversion of Grid Elements with language set to "all languages"
 * It is recommended to create a backup of your TYPO3 database, so you can easily roll back if the result is not as expected
 
+##Commands
+````
+php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:deleteunreferencedelements <bool>$markAsNegativeColPos
+php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:convertreferenceelements <bool>$useParentUidForTranslations <bool>$useAllLangIfDefaultLangIsReferenced
+php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:migratecontent <int>$uidTvTemplate <int>$uidBeLayout <string>$data <bool>$markDeleted <string>$convertFlexformOption = 'merge' <string>$flexformFieldPrefix
+````
+
 ## Feedback and updates
 
 The extension is hosted on GitHub. Please report feedback, bugs and changerequests directly at

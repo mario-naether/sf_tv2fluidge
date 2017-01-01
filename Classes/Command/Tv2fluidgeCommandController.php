@@ -3,6 +3,22 @@ class Tx_SfTv2fluidge_Command_Tv2fluidgeCommandController extends \TYPO3\CMS\Ext
 {
 
     /**
+     * UnreferencedElementHelper
+     *
+     * @var Tx_SfTv2fluidge_Service_UnreferencedElementHelper
+     * @inject
+     */
+    protected $unreferencedElementHelper;
+
+    /**
+     * ReferenceElementHelper
+     *
+     * @var Tx_SfTv2fluidge_Service_ReferenceElementHelper
+     * @inject
+     */
+    protected $referenceElementHelper;
+
+    /**
      * MigrateContentHelper
      *
      * @var Tx_SfTv2fluidge_Service_MigrateContentHelper
@@ -17,35 +33,63 @@ class Tx_SfTv2fluidge_Command_Tv2fluidgeCommandController extends \TYPO3\CMS\Ext
     protected $sharedHelper;
 
     /**
-     * @param $uidTvTemplate
-     * @param $uidBeLayout
-     * @param array $data
-     * @param bool $markDeleted
+     * @param bool $markAsNegativeColPos
      */
-    public function migrateContentCommand($uidTvTemplate, $uidBeLayout, array $data, $markDeleted = false)
-    {
-
-        var_dump($uidBeLayout);
-        var_dump($data);
-
-        /**
-         *  tvtemplate => '1' (1 chars)
-        belayout => '2' (1 chars)
-        tv_col_1 => 'header' (6 chars)
-        be_col_1 => '1' (1 chars)
-        tv_col_2 => 'content' (7 chars)
-        be_col_2 => '0' (1 chars)
-        tv_col_3 => 'aside' (5 chars)
-        be_col_3 => '2' (1 chars)
-        convertflexformoption => 'merge' (5 chars)
-        flexformfieldprefix => 'tx_' (3 chars)
-        startAction => 'Do it!' (6 chars)
-         */
+    public function deleteUnreferencedElementsCommand($markAsNegativeColPos = false) {
 
         $this->sharedHelper->setUnlimitedTimeout();
 
-        #$uidTvTemplate = (int)$formdata['tvtemplate'];
-       # $uidBeLayout   = (int)$formdata['belayout'];
+        $numRecords = $this->unreferencedElementHelper->markDeletedUnreferencedElementsRecords((bool)$markAsNegativeColPos);
+        $this->outputLine($numRecords . ' records deleted');
+    }
+
+    /**
+     * @param bool $useParentUidForTranslations
+     * @param bool $useAllLangIfDefaultLangIsReferenced
+     */
+    public function convertReferenceElementsCommand($useParentUidForTranslations = false, $useAllLangIfDefaultLangIsReferenced = false) {
+
+        $formdata = array(
+            'useparentuidfortranslations' => (int)$useParentUidForTranslations,
+            'usealllangifdefaultlangisreferenced' => (int)$useAllLangIfDefaultLangIsReferenced
+        );
+
+        $this->sharedHelper->setUnlimitedTimeout();
+
+        $this->referenceElementHelper->initFormData($formdata);
+        $numRecords = $this->referenceElementHelper->convertReferenceElements();
+        $this->outputLine($numRecords . ' records converted');
+    }
+
+    /**
+     * @param int $uidTvTemplate
+     * @param int $uidBeLayout
+     * @param string $data
+     * @param bool $markDeleted
+     * @param string $convertFlexformOption
+     * @param string $flexformFieldPrefix
+     */
+    public function migrateContentCommand($uidTvTemplate, $uidBeLayout, $data, $markDeleted = false, $convertFlexformOption = 'merge', $flexformFieldPrefix = 'tx_')
+    {
+        $formdata = array(
+            'tvtemplate' => $uidTvTemplate,
+            'belayout' => $uidBeLayout,
+            'convertflexformoption' => $convertFlexformOption,
+            'flexformfieldprefix' => $flexformFieldPrefix,
+            'markdeleted' => $markDeleted
+        );
+
+        $data = explode(',', $data);
+        $i = 1;
+        foreach ($data as $columns) {
+            $colsArr = explode('=', $columns);
+
+            $formdata['tv_col_'.$i] = $colsArr[0];
+            $formdata['be_col_'.$i] = $colsArr[1];
+            $i++;
+        }
+
+        $this->sharedHelper->setUnlimitedTimeout();
 
         $contentElementsUpdated = 0;
         $pageTemplatesUpdated   = 0;
