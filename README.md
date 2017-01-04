@@ -243,6 +243,9 @@ This module should only be used when the following steps are processed:
 * It is recommended to create a backup of your TYPO3 database, so you can easily roll back if the result is not as expected
 
 ##Commands
+The BE user _low_level need:
+ * read/write access to tt_content and pages
+ * DB Mount point
 ````
 php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:deleteunreferencedelements <bool>$markAsNegativeColPos
 php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:convertreferenceelements <bool>$useParentUidForTranslations <bool>$useAllLangIfDefaultLangIsReferenced
