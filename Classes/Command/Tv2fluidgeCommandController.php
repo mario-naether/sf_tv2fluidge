@@ -33,6 +33,13 @@ class Tx_SfTv2fluidge_Command_Tv2fluidgeCommandController extends \TYPO3\CMS\Ext
     protected $sharedHelper;
 
     /**
+     * @var Tx_SfTv2fluidge_Service_FixSortingHelper
+     * @inject
+     */
+    protected $fixSortingHelper;
+
+
+    /**
      * @param bool $markAsNegativeColPos
      */
     public function deleteUnreferencedElementsCommand($markAsNegativeColPos = false) {
@@ -115,5 +122,34 @@ class Tx_SfTv2fluidge_Command_Tv2fluidgeCommandController extends \TYPO3\CMS\Ext
                 $this->migrateContentHelper->markTvTemplateDeleted($uidTvTemplate);
             }
         }
+    }
+
+
+    /**
+     * Action for fix sorting
+     *
+     * @param int $pageUid
+     * @param string $fixOptions
+     * @return void
+     * @internal param array $formdata
+     */
+    public function fixSortingCommand($fixOptions, $pageUid)
+    {
+        $this->sharedHelper->setUnlimitedTimeout();
+
+        $numUpdated = 0;
+        if ($fixOptions == 'singlePage')
+        {
+            $numUpdated = $this->fixSortingHelper->fixSortingForPage($pageUid);
+        }
+        else
+        {
+            $pageUids = $this->sharedHelper->getPageIds();
+            foreach ($pageUids as $pageUid)
+            {
+                $numUpdated += $this->fixSortingHelper->fixSortingForPage($pageUid);
+            }
+        }
+        $this->outputLine($numUpdated . ' sortings fixed');
     }
 }

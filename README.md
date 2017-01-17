@@ -250,6 +250,7 @@ The BE user _low_level need:
 php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:deleteunreferencedelements <bool>$markAsNegativeColPos
 php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:convertreferenceelements <bool>$useParentUidForTranslations <bool>$useAllLangIfDefaultLangIsReferenced
 php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:migratecontent <int>$uidTvTemplate <int>$uidBeLayout <string>$data <bool>$markDeleted <string>$convertFlexformOption = 'merge' <string>$flexformFieldPrefix
+php ./typo3/cli_dispatch.phpsh extbase tv2fluidge:fixsorting <string>$fixOptions <int>$pageUid
 ````
 
 ## Feedback and updates
